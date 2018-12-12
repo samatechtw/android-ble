@@ -26,7 +26,7 @@ import java.util.UUID;
 import timber.log.Timber;
 
 /**
- * Service for managing connection and data communication with a GATT server (Podo) and the device
+ * Service for managing connection and data communication with a GATT server and the device
  * Serializes BLE commands by maintaining them in a queue.
  */
 @TargetApi(18)
@@ -40,18 +40,18 @@ public class BluetoothLeService extends Service {
     private BluetoothAdapter bluetoothAdapter;
     private final ArrayList<LeOperation> operationQueue = new ArrayList<>();
 
-    public final static String ACTION_GATT_CONNECTED = "com.podolabs.bluetooth.le.ACTION_GATT_CONNECTED";
-    public final static String ACTION_GATT_DISCONNECTED = "com.podolabs.bluetooth.le.ACTION_GATT_DISCONNECTED";
-    public final static String ACTION_BLUETOOTH_ERROR = "com.podolabs.bluetooth.le.ACTION_BLUETOOTH_ERROR";
-    public final static String ACTION_GATT_SERVICES_DISCOVERED = "com.podolabs.bluetooth.le.ACTION_GATT_SERVICES_DISCOVERED";
-    public final static String ACTION_DATA_AVAILABLE = "com.podolabs.bluetooth.le.ACTION_DATA_AVAILABLE";
-    public final static String ACTION_GATT_WRITE = "com.podolabs.bluetooth.le.ACTION_GATT_WRITE";
-    public final static String ACTION_GATT_NOTIFY = "com.podolabs.bluetooth.le.ACTION_GATT_NOTIFY";
+    public final static String ACTION_GATT_CONNECTED = "com.sampullman.bluetooth.le.ACTION_GATT_CONNECTED";
+    public final static String ACTION_GATT_DISCONNECTED = "com.sampullman.bluetooth.le.ACTION_GATT_DISCONNECTED";
+    public final static String ACTION_BLUETOOTH_ERROR = "com.sampullman.bluetooth.le.ACTION_BLUETOOTH_ERROR";
+    public final static String ACTION_GATT_SERVICES_DISCOVERED = "com.sampullman.bluetooth.le.ACTION_GATT_SERVICES_DISCOVERED";
+    public final static String ACTION_DATA_AVAILABLE = "com.sampullman.bluetooth.le.ACTION_DATA_AVAILABLE";
+    public final static String ACTION_GATT_WRITE = "com.sampullman.bluetooth.le.ACTION_GATT_WRITE";
+    public final static String ACTION_GATT_NOTIFY = "com.sampullman.bluetooth.le.ACTION_GATT_NOTIFY";
 
-    public final static String EXTRA_DATA = "com.podolabs.bluetooth.le.EXTRA_DATA";
+    public final static String EXTRA_DATA = "com.sampullman.bluetooth.le.EXTRA_DATA";
     // unique identifier that tells what type of data
-    public final static String EXTRA_UUID = "com.podolabs.bluetooth.le.EXTRA_UUID";
-    public final static String EXTRA_STATUS = "com.podolabs.bluetooth.le.EXTRA_STATUS";
+    public final static String EXTRA_UUID = "com.sampullman.bluetooth.le.EXTRA_UUID";
+    public final static String EXTRA_STATUS = "com.sampullman.bluetooth.le.EXTRA_STATUS";
 
     class LocalBinder extends Binder {
         public BluetoothLeService getService() {

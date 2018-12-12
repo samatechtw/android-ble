@@ -5,7 +5,7 @@ import android.bluetooth.BluetoothGatt;
 
 import com.sampullman.ble.BluetoothLeService;
 import com.sampullman.ble.LeConnection;
-import com.sampullman.ble.PodoGattCallback;
+import com.sampullman.ble.GattCallback;
 
 import timber.log.Timber;
 
@@ -22,7 +22,7 @@ public class ConnectOperation extends LeOperation {
         // parameter to false.
         BluetoothGatt gatt;
         int currentApiVersion = android.os.Build.VERSION.SDK_INT;
-        PodoGattCallback gattCallback = new PodoGattCallback(service);
+        GattCallback gattCallback = new GattCallback(service);
         gattCallback.startConnectTimer();
 
         BluetoothDevice device = leConnection.getDevice();

@@ -45,7 +45,7 @@ public class CharacteristicRequest extends LeOperation {
         }
         BluetoothGattService service = gatt.getService(serviceUuid);
         if (service == null) {
-            Timber.d("Podo service not found!");
+            Timber.d("Service not found! %s", serviceUuid.toString());
             return null;
         }
         return service.getCharacteristic(uuid);

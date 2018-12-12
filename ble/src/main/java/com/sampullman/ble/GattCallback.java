@@ -20,12 +20,12 @@ import static com.sampullman.ble.BluetoothLeService.*;
  * Implements callback methods for GATT events that the app cares about.
  * For example: connection change and services discovered
  */
-public class PodoGattCallback extends BluetoothGattCallback {
+public class GattCallback extends BluetoothGattCallback {
     private final Handler handler = new Handler();
     private BluetoothGatt gatt;
     private final BluetoothLeService leService;
 
-    public PodoGattCallback(BluetoothLeService leService) {
+    public GattCallback(BluetoothLeService leService) {
         this.leService = leService;
     }
 
@@ -34,19 +34,16 @@ public class PodoGattCallback extends BluetoothGattCallback {
     }
 
     public void startConnectTimer() {
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Timber.d("GATT CALLBACK FAIL gatt null=%b", gatt==null);
-                if(gatt != null) {
-                    List<BluetoothDevice> devices = leService.getConnectedDevices();
-                    if(devices != null && devices.size() == 0) {
-                        broadcastUpdate(gatt.getDevice(), ACTION_GATT_DISCONNECTED, BluetoothGatt.GATT_SUCCESS);
-                    }
-                    gatt.disconnect();
-                    gatt.close();
-                    gatt = null;
+        handler.postDelayed(() -> {
+            Timber.d("GATT CALLBACK FAIL gatt null=%b", gatt==null);
+            if(gatt != null) {
+                List<BluetoothDevice> devices = leService.getConnectedDevices();
+                if(devices != null && devices.size() == 0) {
+                    broadcastUpdate(gatt.getDevice(), ACTION_GATT_DISCONNECTED, BluetoothGatt.GATT_SUCCESS);
                 }
+                gatt.disconnect();
+                gatt.close();
+                gatt = null;
             }
         }, 10000);
     }

@@ -76,8 +76,8 @@ public class LeClient {
     // ACTION_GATT_CONNECTED: connected to a GATT server.
     // ACTION_GATT_DISCONNECTED: disconnected from a GATT server.
     // ACTION_GATT_SERVICES_DISCOVERED: discovered GATT services.
-    // ACTION_DATA_AVAILABLE: received Podo data as a result of read or notify
-    // ACTION_GATT_NOTIFY: tell Podo to send data on a specific port
+    // ACTION_DATA_AVAILABLE: received data as a result of read or notify
+    // ACTION_GATT_NOTIFY: tell device to send data on a specific port
     // ACTION_GATT_WRITE: Finished writing a characteristic
     private final BroadcastReceiver gattUpdateReceiver = new BroadcastReceiver() {
         @Override
@@ -245,12 +245,8 @@ public class LeClient {
     public void connectLeDelayed(final LeConnection connection) {
         connectionList.add(connection);
 
-        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                connectLe(connection);
-            }
-        }, 120);
+        final Handler handler = new Handler(Looper.getMainLooper());
+        handler.postDelayed(() -> connectLe(connection),120);
     }
 
     // Abstracted from connectLe(BluetoothDevice) so we can reuse this code for LE reconnection
@@ -270,7 +266,7 @@ public class LeClient {
         Timber.d("Connecting to LE device");
     }
 
-    // return boolean true if successfully disconnected last Podo
+    // True if successfully disconnected last device
     public void disconnectLastConnection() {
         if(connectionList.size() == 0) {
             Timber.d("could not disconnect connectionList with 0 size");

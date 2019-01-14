@@ -158,4 +158,8 @@ public class BluetoothLeService extends Service {
         byte[] data = on ? BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE : BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE;
         queueOperation(new CharacteristicRequest(gatt, serviceUuid, charUUID, data, CharacteristicRequest.REQUEST_NOTIFY));
     }
+
+    public void requestIndication(BluetoothGatt gatt, UUID serviceUuid, UUID charUUID) {
+        queueOperation(new CharacteristicRequest(gatt, serviceUuid, charUUID, CharacteristicRequest.REQUEST_INDICATE));
+    }
 }

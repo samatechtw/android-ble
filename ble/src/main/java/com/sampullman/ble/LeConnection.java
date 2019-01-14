@@ -135,6 +135,10 @@ public class LeConnection {
         leService.requestNotification(gatt, serviceUuid, uuid, on);
     }
 
+    public void requestIndication(UUID serviceUuid, UUID uuid) {
+        leService.requestIndication(gatt, serviceUuid, uuid);
+    }
+
     public void readCharacteristic(UUID serviceUuid, UUID characteristic) {
         leService.readCharacteristic(gatt, serviceUuid, characteristic);
     }

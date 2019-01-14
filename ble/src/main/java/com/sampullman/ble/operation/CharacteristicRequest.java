@@ -12,11 +12,11 @@ import java.util.UUID;
 import timber.log.Timber;
 
 public class CharacteristicRequest extends LeOperation {
-    public static final int WRITE=1, READ=2, REQUEST_NOTIFY=3;
+    public static final int WRITE=1, READ=2, REQUEST_NOTIFY=3, REQUEST_INDICATE=4;
     private static final UUID CHAR_NOTIFICATION_DESCRIPTOR_UUID = UUID.fromString("00002902-0000-1000-8000-00805f9b34fb");
-    final UUID uuid, serviceUuid;
-    final byte[] data;
-    final int type;
+    private final UUID uuid, serviceUuid;
+    private final byte[] data;
+    private final int type;
 
     public CharacteristicRequest(BluetoothGatt gatt, UUID serviceUuid, UUID uuid, int type) {
         this(gatt, serviceUuid, uuid, null, type);
@@ -55,6 +55,15 @@ public class CharacteristicRequest extends LeOperation {
         return serviceUuid;
     }
 
+    private boolean descriptorWorkaround(BluetoothGatt gatt, BluetoothGattDescriptor desc) {
+        final BluetoothGattCharacteristic parentCharacteristic = desc.getCharacteristic();
+        final int originalWriteType = parentCharacteristic.getWriteType();
+        parentCharacteristic.setWriteType(BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT);
+        final boolean result = gatt.writeDescriptor(desc);
+        parentCharacteristic.setWriteType(originalWriteType);
+        return result;
+    }
+
     public boolean execute(BluetoothLeService service) {
         BluetoothGatt gatt = getGatt();
         BluetoothGattCharacteristic cha = getServiceCharacteristic(gatt, getServiceUuid(), getUuid());
@@ -69,7 +78,7 @@ public class CharacteristicRequest extends LeOperation {
             return gatt.writeCharacteristic(cha);
 
         } else if(getType() == CharacteristicRequest.READ) {
-            //Timber.d("Sent read %s", cha.getUuid());
+            //Timber.d("Sent read %s", cha.getUuid());v
             return gatt.readCharacteristic(cha);
 
         } else if(getType() == CharacteristicRequest.REQUEST_NOTIFY) {
@@ -81,7 +90,19 @@ public class CharacteristicRequest extends LeOperation {
 
             if(desc != null) {
                 desc.setValue(getData());
-                return gatt.writeDescriptor(desc);
+
+                return descriptorWorkaround(gatt, desc);
+            } else {
+                return false;
+            }
+        } else if(getType() == CharacteristicRequest.REQUEST_INDICATE) {
+            gatt.setCharacteristicNotification(cha, true);
+            BluetoothGattDescriptor desc = cha.getDescriptor(CHAR_NOTIFICATION_DESCRIPTOR_UUID);
+
+            if(desc != null) {
+                desc.setValue(BluetoothGattDescriptor.ENABLE_INDICATION_VALUE);
+
+                return descriptorWorkaround(gatt, desc);
             } else {
                 return false;
             }

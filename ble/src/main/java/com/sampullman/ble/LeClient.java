@@ -189,11 +189,12 @@ public class LeClient {
             return null;
         }
         for(LeConnection connection : connectionList) {
+            Timber.d("FIND %s", connection.getDevice().getAddress());
             if(device.getAddress().equals(connection.getDevice().getAddress())) {
                 return connection;
             }
         }
-        Timber.d("unable to find getConnectionFromDevice()");
+        Timber.d("unable to find getConnectionFromDevice() %s, %d", device.getAddress(), connectionList.size());
         return null;
     }
 

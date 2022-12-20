@@ -1,5 +1,6 @@
 package com.sampullman.ble;
 
+import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
 import android.os.Handler;
@@ -50,6 +51,7 @@ public class LeConnection {
         }
     }
 
+    @SuppressLint("MissingPermission")
     public void connected() {
         this.connectionState = STATE_CONNECTED;
         discoveryTries = 3;
@@ -64,6 +66,12 @@ public class LeConnection {
         this.connectionState = STATE_DISCONNECTED;
     }
 
+    @SuppressLint("MissingPermission")
+    public void highPriority() {
+        gatt.requestConnectionPriority(BluetoothGatt.CONNECTION_PRIORITY_HIGH);
+    }
+
+    @SuppressLint("MissingPermission")
     void handleServicesDiscovered(int status) {
         if (status == BluetoothGatt.GATT_SUCCESS) {
 
@@ -91,6 +99,7 @@ public class LeConnection {
      * After using a given BLE device, the app must call this method to ensure resources are
      * released properly.
      */
+    @SuppressLint("MissingPermission")
     public void disconnectAndCloseGatt() {
         Timber.d("le connection disconnected and closed: %s, gatt null=%b", device.getName(), gatt==null);
         if(gatt != null) {
@@ -121,6 +130,7 @@ public class LeConnection {
         return device;
     }
 
+    @SuppressLint("MissingPermission")
     public String getName() {
         return (device == null) ? null : device.getName();
     }
@@ -147,6 +157,7 @@ public class LeConnection {
         leService.writeCharacteristic(gatt, serviceUuid, characteristic, data);
     }
 
+    @SuppressLint("MissingPermission")
     @Override
     public String toString() {
         return "LeConnection name:" + device.getName() + ", connectionState:" + connectionState;

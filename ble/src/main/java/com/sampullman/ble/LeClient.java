@@ -1,5 +1,6 @@
 package com.sampullman.ble;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
@@ -39,7 +40,7 @@ public class LeClient {
         void servicesDiscovered(LeConnection connection);
         void characteristicRead(LeConnection connection, String uuid, byte[] data);
         void characteristicNotification(LeConnection connection, String uuid, byte[] data);
-        void characetersticWriteComplete(LeConnection connection, String uuid, byte[] data);
+        void characteristicWriteComplete(LeConnection connection, String uuid, byte[] data);
     }
 
     public LeClient(Context appContext) {
@@ -153,7 +154,7 @@ public class LeClient {
         byte[] value = intent.getByteArrayExtra(BluetoothLeService.EXTRA_DATA);
 
         if(bleListener != null) {
-            bleListener.characetersticWriteComplete(connection, uuid, value);
+            bleListener.characteristicWriteComplete(connection, uuid, value);
         }
     }
 
@@ -252,6 +253,7 @@ public class LeClient {
 
     // Abstracted from connectLe(BluetoothDevice) so we can reuse this code for LE reconnection
     // No need to add to connectionList, it should only happen on the first attempt
+    @SuppressLint("MissingPermission")
     private void connectLe(LeConnection connection) {
 
         if(!leService.connect(connection)) {
@@ -289,7 +291,7 @@ public class LeClient {
     }
 
     public boolean disconnectDeviceByName(String name) {
-        if(name==null) {
+        if(name == null) {
             Timber.e("cannot disconnect with null name");
             return false;
         }
@@ -316,21 +318,21 @@ public class LeClient {
     public boolean isConnected() {
         if(leService == null) {
             Timber.d("BLE Service null!");
-            return false;
         } else {
             for(LeConnection connection : connectionList) {
                 if(connection.isConnected()) {
                     return true;
                 }
             }
-            return false;
         }
+        return false;
     }
 
     public int getConnectionCount() {
         return connectionList.size();
     }
 
+    @SuppressLint("MissingPermission")
     public String getDeviceName(int index) {
         return connectionList.get(index).getDevice().getName();
     }

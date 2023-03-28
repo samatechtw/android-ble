@@ -68,6 +68,11 @@ public class GattCallback extends BluetoothGattCallback {
     }
 
     @Override
+    public void onMtuChanged(BluetoothGatt gatt, int mtu, int status) {
+        Timber.d("MTU: %d, status=%d", mtu, status);
+    }
+
+    @Override
     public void onServicesDiscovered(BluetoothGatt gatt, int status) {
         broadcastUpdate(gatt.getDevice(), ACTION_GATT_SERVICES_DISCOVERED, status);
     }
@@ -101,7 +106,7 @@ public class GattCallback extends BluetoothGattCallback {
     }
 
     @Override
-    public void onDescriptorWrite (BluetoothGatt gatt, BluetoothGattDescriptor descriptor, int status) {
+    public void onDescriptorWrite(BluetoothGatt gatt, BluetoothGattDescriptor descriptor, int status) {
         leService.operationComplete();
     }
 

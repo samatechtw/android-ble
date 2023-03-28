@@ -18,6 +18,7 @@ import android.os.Looper;
 import com.sampullman.ble.operation.CharacteristicRequest;
 import com.sampullman.ble.operation.ConnectOperation;
 import com.sampullman.ble.operation.LeOperation;
+import com.sampullman.ble.operation.RequestMtuOperation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -123,7 +124,7 @@ public class BluetoothLeService extends Service {
         });
     }
 
-    private void queueOperation(LeOperation operation) {
+    public void queueOperation(LeOperation operation) {
         operationQueue.add(operation);
         if(operationQueue.size() == 1) {
             operation.execute(this);
@@ -161,5 +162,9 @@ public class BluetoothLeService extends Service {
 
     public void requestIndication(BluetoothGatt gatt, UUID serviceUuid, UUID charUUID) {
         queueOperation(new CharacteristicRequest(gatt, serviceUuid, charUUID, CharacteristicRequest.REQUEST_INDICATE));
+    }
+
+    public void requestMtu(BluetoothGatt gatt, int mtu) {
+        queueOperation(new RequestMtuOperation(gatt,mtu));
     }
 }

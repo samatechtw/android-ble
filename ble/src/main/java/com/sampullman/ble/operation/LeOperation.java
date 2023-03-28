@@ -5,7 +5,7 @@ import android.bluetooth.BluetoothGatt;
 import com.sampullman.ble.BluetoothLeService;
 
 public abstract class LeOperation {
-    private BluetoothGatt gatt;
+    BluetoothGatt gatt;
 
     public LeOperation() {}
 

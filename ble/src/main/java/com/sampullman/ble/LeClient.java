@@ -84,7 +84,6 @@ public class LeClient {
         @Override
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
-            Timber.i("Received GATT update: %s", action);
             BluetoothDevice device = intent.getParcelableExtra(action);
             LeConnection connection = getConnectionFromDevice(device);
 
@@ -190,7 +189,6 @@ public class LeClient {
             return null;
         }
         for(LeConnection connection : connectionList) {
-            Timber.d("FIND %s", connection.getDevice().getAddress());
             if(device.getAddress().equals(connection.getDevice().getAddress())) {
                 return connection;
             }

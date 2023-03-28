@@ -82,8 +82,6 @@ public class CharacteristicRequest extends LeOperation {
             return gatt.readCharacteristic(cha);
 
         } else if(getType() == CharacteristicRequest.REQUEST_NOTIFY) {
-            //Timber.d("Sent notify %s", cha.getUuid());
-
             boolean enabled = getData() == BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE;
             gatt.setCharacteristicNotification(cha, enabled);
             BluetoothGattDescriptor desc = cha.getDescriptor(CHAR_NOTIFICATION_DESCRIPTOR_UUID);
